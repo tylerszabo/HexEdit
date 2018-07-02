@@ -1,0 +1,377 @@
+<?xml version="1.0"?>
+<!DOCTYPE binary_file_format SYSTEM "BinaryFileFormat.dtd">
+<binary_file_format name="lnk_file" default_byte_order="little" default_char_set="ascii" web_site="" type_name="" allow_editing="false">
+  <define_struct type_name="GUID" expr="{this.p1;%08X}-{this.p2;%04X}-{this.p3;%04X}-{this.b0;%02X}{this.b1;%02X}-{this.b2;%02X}{this.b3;%02X}{this.b4;%02X}{this.b5;%02X}{this.b6;%02X}{this.b7;%02X}">
+    <data type="int" name="p1" format="unsigned" len="4" display="hex"/>
+    <data type="int" name="p2" format="unsigned" len="2" display="hex"/>
+    <data type="int" name="p3" format="unsigned" len="2" display="hex"/>
+    <data type="int" name="b0" format="unsigned" len="1" display="hex"/>
+    <data type="int" name="b1" format="unsigned" len="1" display="hex"/>
+    <data type="int" name="b2" format="unsigned" len="1" display="hex"/>
+    <data type="int" name="b3" format="unsigned" len="1" display="hex"/>
+    <data type="int" name="b4" format="unsigned" len="1" display="hex"/>
+    <data type="int" name="b5" format="unsigned" len="1" display="hex"/>
+    <data type="int" name="b6" format="unsigned" len="1" display="hex"/>
+    <data type="int" name="b7" format="unsigned" len="1" display="hex"/>
+  </define_struct>
+  <define_struct type_name="data_astring" expr="&quot;{this.data;%s}&quot;">
+    <data type="int" name="count" format="unsigned" len="2" display="dec"/>
+    <data type="string" name="data" format="ascii" len="count"/>
+  </define_struct>
+  <define_struct type_name="data_ustring" expr="&quot;{this.data;%s}&quot;">
+    <data type="int" name="count" format="unsigned" len="2" display="dec"/>
+    <data type="string" name="data" format="unicode" len="count * 2"/>
+  </define_struct>
+  <define_struct type_name="color32" expr="#{this.red;%02x}{this.green;%02x}{this.blue;%02x}">
+    <data type="int" name="red" format="unsigned" len="1" display="dec" color="a0a0e0"/>
+    <data type="int" name="green" format="unsigned" len="1" display="dec" color="c0e0c0"/>
+    <data type="int" name="blue" format="unsigned" len="1" display="dec" color="ffc0c0"/>
+    <data type="int" name="xtra" format="unsigned" len="1" display="dec" color="d2d2d2"/>
+  </define_struct>
+  <struct name="Header" type_name="" comment="See https://msdn.microsoft.com/en-us/library/dd871305.aspx" expr="">
+    <data type="int" name="size" format="unsigned" len="4" display="dec" domain="this == 0x4c"/>
+    <use_struct name="CLSID" type_name="GUID"/>
+    <struct name="data_flags">
+      <data type="int" name="HasTargetIDList" format="unsigned" len="4" type_name="bit-field" bits="1" direction="up" domain="{FALSE,TRUE}"/>
+      <data type="int" name="HasLinkInfo" format="unsigned" len="4" type_name="bit-field" bits="1" direction="up" domain="{FALSE,TRUE}"/>
+      <data type="int" name="HasName" format="unsigned" len="4" type_name="bit-field" bits="1" direction="up" domain="{FALSE,TRUE}"/>
+      <data type="int" name="HasRelativePath" format="unsigned" len="4" type_name="bit-field" bits="1" direction="up" domain="{FALSE,TRUE}"/>
+      <data type="int" name="HasWorkingDir" format="unsigned" len="4" type_name="bit-field" bits="1" direction="up" domain="{FALSE,TRUE}"/>
+      <data type="int" name="HasArguments" format="unsigned" len="4" type_name="bit-field" bits="1" direction="up" domain="{FALSE,TRUE}"/>
+      <data type="int" name="HasIconLocation" format="unsigned" len="4" type_name="bit-field" bits="1" direction="up" domain="{FALSE,TRUE}"/>
+      <data type="int" name="IsUnicode" format="unsigned" len="4" type_name="bit-field" bits="1" direction="up" domain="{FALSE,TRUE}"/>
+      <data type="int" name="ForceNoLinkInfo" format="unsigned" len="4" type_name="bit-field" bits="1" direction="up" domain="{FALSE,TRUE}"/>
+      <data type="int" name="HasExpString" format="unsigned" len="4" type_name="bit-field" bits="1" direction="up" domain="{FALSE,TRUE}"/>
+      <data type="int" name="RunInSeparateProcess" format="unsigned" len="4" type_name="bit-field" bits="1" direction="up" domain="{FALSE,TRUE}"/>
+      <data type="int" name="unknown" format="unsigned" len="4" type_name="bit-field" bits="1" direction="up"/>
+      <data type="int" name="HasDarwinID" format="unsigned" len="4" type_name="bit-field" bits="1" direction="up" domain="{FALSE,TRUE}"/>
+      <data type="int" name="RunAsUser" format="unsigned" len="4" type_name="bit-field" bits="1" direction="up" domain="{FALSE,TRUE}"/>
+      <data type="int" name="HasExpIcon" format="unsigned" len="4" type_name="bit-field" bits="1" direction="up" domain="{FALSE,TRUE}"/>
+      <data type="int" name="NoPidlAlias" format="unsigned" len="4" type_name="bit-field" bits="1" direction="up" domain="{FALSE,TRUE}"/>
+      <data type="int" name="unknown" format="unsigned" len="4" type_name="bit-field" bits="1" direction="up"/>
+      <data type="int" name="RunWithShimLayer" format="unsigned" len="4" type_name="bit-field" bits="1" direction="up" domain="{FALSE,TRUE}"/>
+      <data type="int" name="ForceNoLinkTrack" format="unsigned" len="4" type_name="bit-field" bits="1" direction="up" domain="{FALSE,TRUE}"/>
+      <data type="int" name="EnableTargetMetadata" format="unsigned" len="4" type_name="bit-field" bits="1" direction="up" domain="{FALSE,TRUE}"/>
+      <data type="int" name="DisableLinkPathTracking" format="unsigned" len="4" type_name="bit-field" bits="1" direction="up" domain="{FALSE,TRUE}"/>
+      <data type="int" name="DisableKnownFolderTracking" format="unsigned" len="4" type_name="bit-field" bits="1" direction="up" domain="{FALSE,TRUE}"/>
+      <data type="int" name="DisableKnownFolderAlias" format="unsigned" len="4" type_name="bit-field" bits="1" direction="up" domain="{FALSE,TRUE}"/>
+      <data type="int" name="AllowLinkToLink" format="unsigned" len="4" type_name="bit-field" bits="1" direction="up" domain="{FALSE,TRUE}"/>
+      <data type="int" name="UnaliasOnSave" format="unsigned" len="4" type_name="bit-field" bits="1" direction="up" domain="{FALSE,TRUE}"/>
+      <data type="int" name="PreferEnvironmentPath" format="unsigned" len="4" type_name="bit-field" bits="1" direction="up" domain="{FALSE,TRUE}"/>
+      <data type="int" name="KeepLocalIDListForUNCTarget" format="unsigned" len="4" type_name="bit-field" bits="1" direction="up" domain="{FALSE,TRUE}"/>
+    </struct>
+    <struct name="attribute_flags">
+      <data type="int" name="read-only" format="unsigned" len="4" type_name="bit-field" bits="1" direction="up" domain="{false,true}"/>
+      <data type="int" name="hidden" format="unsigned" len="4" type_name="bit-field" bits="1" direction="up" domain="{false,true}"/>
+      <data type="int" name="system" format="unsigned" len="4" type_name="bit-field" bits="1" direction="up" domain="{false,true}"/>
+      <data type="int" name="volume" format="unsigned" len="4" type_name="bit-field" bits="1" direction="up" domain="{false,true}"/>
+      <data type="int" name="directory" format="unsigned" len="4" type_name="bit-field" bits="1" direction="up" domain="{false,true}"/>
+      <data type="int" name="archive" format="unsigned" len="4" type_name="bit-field" bits="1" direction="up" domain="{false,true}"/>
+      <data type="int" name="device" format="unsigned" len="4" type_name="bit-field" bits="1" direction="up" domain="{false,true}"/>
+      <data type="int" name="normal" format="unsigned" len="4" type_name="bit-field" bits="1" direction="up" domain="{false,true}"/>
+      <data type="int" name="temp" format="unsigned" len="4" type_name="bit-field" bits="1" direction="up" domain="{false,true}"/>
+      <data type="int" name="sparse" format="unsigned" len="4" type_name="bit-field" bits="1" direction="up" domain="{false,true}"/>
+      <data type="int" name="reparse" format="unsigned" len="4" type_name="bit-field" bits="1" direction="up" domain="{false,true}"/>
+      <data type="int" name="compressed" format="unsigned" len="4" type_name="bit-field" bits="1" direction="up" domain="{false,true}"/>
+      <data type="int" name="offline" format="unsigned" len="4" type_name="bit-field" bits="1" direction="up" domain="{false,true}"/>
+      <data type="int" name="do_not_index" format="unsigned" len="4" type_name="bit-field" bits="1" direction="up" domain="{false,true}"/>
+      <data type="int" name="encryped" format="unsigned" len="4" type_name="bit-field" bits="1" direction="up" domain="{false,true}"/>
+      <data type="int" name="unknown" format="unsigned" len="4" type_name="bit-field" bits="1" direction="up"/>
+      <data type="int" name="virtual" format="unsigned" len="4" type_name="bit-field" bits="1" direction="up" domain="{false,true}"/>
+    </struct>
+    <data type="date" name="ctime" format="filetime"/>
+    <data type="date" name="atime" format="filetime"/>
+    <data type="date" name="mtime" format="filetime"/>
+    <data type="int" name="file_size" format="unsigned" len="4" display="dec"/>
+    <data type="int" name="icon_index" format="signed" len="4" display="dec"/>
+    <data type="int" name="ShowWindow" format="unsigned" len="4" domain="{SW_HIDE, SW_SHOWNORMAL, SW_SHOWMINIMIZED, SW_SHOWMAXIMIZED, SW_SHOWNOACTIVATE, SW_SHOW, SW_MINIMIZE, SW_SHOWMINNOACTIVE, SW_SHOWNA, SW_RESTORE, SW_SHOWDEFAULT, SW_SHOWDEFAULT, SW_FORCEMINIMIZE, SW_NORMALNA = 0xcc}"/>
+    <struct name="Hotkey" expr="{this.Shift == 1 ? &quot;Shift +&quot; : &quot;&quot;;%s} {this.Control == 1 ? &quot;Ctrl +&quot; : &quot;&quot;;%s} {this.Alt == 1 ? &quot;Alt +&quot; : &quot;&quot;;%s} {this.Key;%c}">
+      <data type="char" name="Key" format="default"/>
+      <data type="int" name="Shift" format="unsigned" len="1" bits="1" direction="up" domain="{false,true}"/>
+      <data type="int" name="Control" format="unsigned" len="1" bits="1" direction="up" domain="{false,true}"/>
+      <data type="int" name="Alt" format="unsigned" len="1" bits="1" direction="up" domain="{false,true}"/>
+    </struct>
+    <data type="none" name="reserved" len="10" display=""/>
+  </struct>
+  <if test="Header.data_flags.HasTargetIDList == 1">
+    <struct name="Link_Target_Identifier_List">
+      <data type="int" name="size" format="unsigned" len="2" display="dec"/>
+      <data type="none" name="list" len="size"/>
+    </struct>
+  </if>
+  <if test="Header.data_flags.HasLinkInfo == 1">
+    <struct name="Location_Information" type_name="" comment="" expr="">
+      <data type="int" name="size" format="unsigned" len="4" display="dec"/>
+      <data type="int" name="header_size" format="unsigned" len="4" display="dec"/>
+      <struct name="location_flags">
+        <data type="int" name="VolumeIDAndLocalBasePath" format="unsigned" len="4" type_name="bit-field" bits="1" direction="up" domain="{false,true}"/>
+        <data type="int" name="CommonNetworkRelativeLinkAndPathSuffix" format="unsigned" len="4" type_name="bit-field" bits="1" direction="up" domain="{false,true}"/>
+      </struct>
+      <data type="int" name="volume_info_offset" format="unsigned" len="4" display="hex"/>
+      <jump offset="addressof(size) + volume_info_offset" origin="start">
+        <struct name="volume_information" type_name="" comment="" expr="">
+          <data type="int" name="size" format="unsigned" len="4" display="dec"/>
+          <data type="int" name="drive_type" format="unsigned" len="4" domain="{DRIVE_UNKNOWN, DRIVE_NO_ROOT_DIR, DRIVE_REMOVALBE, DRIVE_FIXED, DRIVE_REMOTE, DRIVE_CDROM, DRIVE_RAMDISK}"/>
+          <data type="int" name="drive_serial" format="unsigned" len="4" display="hex"/>
+          <data type="int" name="volume_label_offset" format="unsigned" len="4" display="hex"/>
+          <jump offset="addressof(size) + volume_label_offset" origin="start">
+            <data type="string" name="volume_label" format="ascii"/>
+          </jump>
+          <if test="volume_label_offset &gt; 16">
+            <data type="int" name="unicode_volume_label_offset" format="unsigned" len="4" display="hex"/>
+          </if>
+          <if test="volume_label_offset &gt; 16">
+            <jump offset="addressof(size) + unicode_volume_label_offset" origin="start">
+              <data type="string" name="unicode_volume_label" format="unicode"/>
+            </jump>
+          </if>
+        </struct>
+      </jump>
+      <data type="int" name="local_path_offset" format="unsigned" len="4" display="hex"/>
+      <jump offset="addressof(size) + local_path_offset" origin="start">
+        <data type="string" name="local_path" format="ascii"/>
+      </jump>
+      <data type="int" name="network_share_offset" format="unsigned" len="4" display="hex"/>
+      <jump offset="addressof(size) + network_share_offset" origin="start">
+        <struct name="network_share_information">
+          <data type="int" name="size" format="unsigned" len="4" display="dec"/>
+          <struct name="network_share_flags">
+            <data type="int" name="ValidDevice" format="unsigned" len="4" type_name="bit-field" bits="1" direction="up" domain="{false,true}"/>
+            <data type="int" name="ValidNetType" format="unsigned" len="4" type_name="bit-field" bits="1" direction="up" domain="{false,true}"/>
+          </struct>
+          <data type="int" name="network_share_name_offset" format="unsigned" len="4" display="hex"/>
+          <jump offset="addressof(size) + network_share_name_offset" origin="start">
+            <data type="string" name="network_share_name" format="ascii"/>
+          </jump>
+          <data type="int" name="device_name_offset" format="unsigned" len="4" display="hex"/>
+          <if test="device_name_offset != 0">
+            <jump offset="addressof(size) + device_name_offset" origin="start">
+              <data type="string" name="device_name" format="unicode"/>
+            </jump>
+          </if>
+          <data type="int" name="network_provider_type" format="unsigned" len="4" display="hex"/>
+          <if test="network_share_name_offset &gt; 20">
+            <data type="int" name="unicode_network_share_name_offset" format="unsigned" len="4" display="hex"/>
+          </if>
+          <if test="network_share_name_offset &gt; 20">
+            <jump offset="addressof(size) + unicode_network_share_name_offset" origin="start">
+              <data type="string" name="unicode_network_share_name" format="unicode"/>
+            </jump>
+          </if>
+          <if test="network_share_name_offset &gt; 20">
+            <data type="int" name="unicode_device_name_offset" format="unsigned" len="4" display="hex"/>
+          </if>
+          <if test="network_share_name_offset &gt; 20">
+            <if test="unicode_device_name_offset != 0">
+              <jump offset="addressof(size) + unicode_device_name_offset" origin="start">
+                <data type="string" name="unicode_device_name" format="unicode"/>
+              </jump>
+            </if>
+          </if>
+        </struct>
+      </jump>
+      <data type="int" name="common_path_offset" format="unsigned" len="4" display="hex"/>
+      <jump offset="addressof(size) + common_path_offset" origin="start">
+        <data type="string" name="common_path" format="ascii"/>
+      </jump>
+      <if test="header_size &gt; 28">
+        <data type="int" name="unicode_local_path_offset" format="unsigned" len="4" display="hex"/>
+      </if>
+      <if test="header_size &gt; 28">
+        <jump offset="addressof(size) + unicode_local_path_offset" origin="start">
+          <data type="string" name="unicode_local_path" format="unicode"/>
+        </jump>
+      </if>
+      <if test="header_size &gt; 32">
+        <data type="int" name="unicode_common_path_offset" format="unsigned" len="4" display="hex"/>
+      </if>
+      <if test="header_size &gt; 32">
+        <jump offset="addressof(size) + unicode_common_path_offset" origin="start">
+          <data type="string" name="unicode_common_path" format="unicode"/>
+        </jump>
+      </if>
+      <data type="none" name="none" len="size - addressof(this) + addressof(size)"/>
+    </struct>
+  </if>
+  <if test="Header.data_flags.IsUnicode == 0">
+    <struct name="Data_Strings">
+      <if test="Header.data_flags.HasName == 1">
+        <use_struct name="description" type_name="data_astring"/>
+      </if>
+      <if test="Header.data_flags.HasRelativePath == 1">
+        <use_struct name="relative_path" type_name="data_astring"/>
+      </if>
+      <if test="Header.data_flags.HasWorkingDir == 1">
+        <use_struct name="working_dir" type_name="data_astring"/>
+      </if>
+      <if test="Header.data_flags.HasArguments == 1">
+        <use_struct name="command_line_args" type_name="data_astring"/>
+      </if>
+      <if test="Header.data_flags.HasIconLocation == 1">
+        <use_struct name="icon_location" type_name="data_astring"/>
+      </if>
+    </struct>
+    <else/>
+    <struct name="Data_Strings">
+      <if test="Header.data_flags.HasName == 1">
+        <use_struct name="description" type_name="data_ustring"/>
+      </if>
+      <if test="Header.data_flags.HasRelativePath == 1">
+        <use_struct name="relative_path" type_name="data_ustring"/>
+      </if>
+      <if test="Header.data_flags.HasWorkingDir == 1">
+        <use_struct name="working_dir" type_name="data_ustring"/>
+      </if>
+      <if test="Header.data_flags.HasArguments == 1">
+        <use_struct name="command_line_args" type_name="data_ustring"/>
+      </if>
+      <if test="Header.data_flags.HasIconLocation == 1">
+        <use_struct name="icon_location" type_name="data_ustring"/>
+      </if>
+    </struct>
+  </if>
+  <for name="Extra_Data_Block" count="" stop_test="this.size == 0">
+    <struct name="elem" type_name="" comment="" expr="">
+      <data type="int" name="size" format="unsigned" len="4" display="dec"/>
+      <if test="size != 0">
+        <data type="int" name="signature" format="unsigned" len="4" display="hex"/>
+      </if>
+      <if test="size != 0">
+        <switch test="signature">
+          <case range="2684354561">
+            <data type="none" name="environment_blockdata" len="size - 8"/>
+          </case>
+          <case range="2684354562">
+            <struct name="console_properties">
+              <struct name="FillAttributes">
+                <data type="int" name="FOREGROUND_BLUE" format="unsigned" len="2" type_name="bit-field" bits="1" direction="up" domain="{false,true}"/>
+                <data type="int" name="FOREGROUND_GREEN" format="unsigned" len="2" type_name="bit-field" bits="1" direction="up" domain="{false,true}"/>
+                <data type="int" name="FOREGROUND_RED" format="unsigned" len="2" type_name="bit-field" bits="1" direction="up" domain="{false,true}"/>
+                <data type="int" name="FOREGROUND_INTENSITY" format="unsigned" len="2" type_name="bit-field" bits="1" direction="up" domain="{false,true}"/>
+                <data type="int" name="BACKGROUND_BLUE" format="unsigned" len="2" type_name="bit-field" bits="1" direction="up" domain="{false,true}"/>
+                <data type="int" name="BACKGROUND_GREEN" format="unsigned" len="2" type_name="bit-field" bits="1" direction="up" domain="{false,true}"/>
+                <data type="int" name="BACKGROUND_RED" format="unsigned" len="2" type_name="bit-field" bits="1" direction="up" domain="{false,true}"/>
+                <data type="int" name="BACKGROUND_INTENSITY" format="unsigned" len="2" type_name="bit-field" bits="1" direction="up" domain="{false,true}"/>
+              </struct>
+              <struct name="PopupFillAttributes">
+                <data type="int" name="FOREGROUND_BLUE" format="unsigned" len="2" type_name="bit-field" bits="1" direction="up" domain="{false,true}"/>
+                <data type="int" name="FOREGROUND_GREEN" format="unsigned" len="2" type_name="bit-field" bits="1" direction="up" domain="{false,true}"/>
+                <data type="int" name="FOREGROUND_RED" format="unsigned" len="2" type_name="bit-field" bits="1" direction="up" domain="{false,true}"/>
+                <data type="int" name="FOREGROUND_INTENSITY" format="unsigned" len="2" type_name="bit-field" bits="1" direction="up" domain="{false,true}"/>
+                <data type="int" name="BACKGROUND_BLUE" format="unsigned" len="2" type_name="bit-field" bits="1" direction="up" domain="{false,true}"/>
+                <data type="int" name="BACKGROUND_GREEN" format="unsigned" len="2" type_name="bit-field" bits="1" direction="up" domain="{false,true}"/>
+                <data type="int" name="BACKGROUND_RED" format="unsigned" len="2" type_name="bit-field" bits="1" direction="up" domain="{false,true}"/>
+                <data type="int" name="BACKGROUND_INTENSITY" format="unsigned" len="2" type_name="bit-field" bits="1" direction="up" domain="{false,true}"/>
+              </struct>
+              <data type="int" name="ScreenBufferSizeX" format="unsigned" len="2" display="dec"/>
+              <data type="int" name="ScreenBufferSizeY" format="unsigned" len="2" display="dec"/>
+              <data type="int" name="WindowSizeX" format="unsigned" len="2" display="dec"/>
+              <data type="int" name="WindowSizeY" format="unsigned" len="2" display="dec"/>
+              <data type="int" name="WindowOriginX" format="unsigned" len="2" display="dec"/>
+              <data type="int" name="WindowOriginY" format="unsigned" len="2" display="dec"/>
+              <data type="int" name="Unused1" format="unsigned" len="4" display="hex"/>
+              <data type="int" name="Unused2" format="unsigned" len="4" display="hex"/>
+              <data type="int" name="FontSize" format="unsigned" len="4" display="dec"/>
+              <data type="int" name="FontFamily" format="unsigned" len="4" display="hex"/>
+              <data type="int" name="FontWeight" format="unsigned" len="4" display="dec"/>
+              <data type="string" name="FaceName" format="unicode" len="64"/>
+              <data type="int" name="CursorSize" format="unsigned" len="4" display="dec"/>
+              <data type="int" name="FullScreen" format="unsigned" len="4" display="dec"/>
+              <data type="int" name="InsertMode" format="unsigned" len="4" display="dec"/>
+              <data type="int" name="AutoPosition" format="unsigned" len="4" display="dec"/>
+              <data type="int" name="HistoryBufferSize" format="unsigned" len="4" display="dec"/>
+              <data type="int" name="NumberOfHistoryBuffers" format="unsigned" len="4" display="dec"/>
+              <data type="int" name="HistoryNoDup" format="unsigned" len="4" display="dec"/>
+              <data type="int" name="padding" format="unsigned" len="4" display="hex"/>
+              <struct name="ColorTable">
+                <use_struct name="black" type_name="color32"/>
+                <use_struct name="blue" type_name="color32"/>
+                <use_struct name="green" type_name="color32"/>
+                <use_struct name="cyan" type_name="color32"/>
+                <use_struct name="red" type_name="color32"/>
+                <use_struct name="magenta" type_name="color32"/>
+                <use_struct name="yellow" type_name="color32"/>
+                <use_struct name="white" type_name="color32" comment="dark grey"/>
+                <use_struct name="bright_black" type_name="color32" comment="light grey"/>
+                <use_struct name="bright_blue" type_name="color32"/>
+                <use_struct name="bright_green" type_name="color32"/>
+                <use_struct name="bright_cyan" type_name="color32"/>
+                <use_struct name="bright_red" type_name="color32"/>
+                <use_struct name="bright_magenta" type_name="color32"/>
+                <use_struct name="bright_yellow" type_name="color32"/>
+                <use_struct name="brigh_white" type_name="color32"/>
+              </struct>
+            </struct>
+          </case>
+          <case range="2684354563">
+            <struct name="distributed_link_tracker_blockdata">
+              <data type="int" name="dlt_size" format="unsigned" len="4" display="hex"/>
+              <data type="int" name="version" format="unsigned" len="4" display="hex"/>
+              <data type="string" name="machineid" format="ascii" len="16"/>
+              <use_struct name="droid_volume_id" type_name="GUID"/>
+              <use_struct name="droid_file_id" type_name="GUID"/>
+              <use_struct name="birth_droid_volume_id" type_name="GUID"/>
+              <use_struct name="birth_droid_file_id" type_name="GUID"/>
+            </struct>
+          </case>
+          <case range="2684354564">
+            <data type="none" name="console_codepage_blockdata" len="size - 8"/>
+          </case>
+          <case range="2684354565">
+            <struct name="special_folder_location">
+              <data type="int" name="special_folder_id" format="unsigned" len="4" display="hex"/>
+              <data type="int" name="first_child_segment_offset" format="unsigned" len="4" display="hex"/>
+            </struct>
+          </case>
+          <case range="2684354566">
+            <data type="none" name="darwin_blockdata" len="size - 8"/>
+          </case>
+          <case range="2684354567">
+            <data type="none" name="icon_location_blockdata" len="size - 8"/>
+          </case>
+          <case range="2684354568">
+            <data type="none" name="shim_blockdata" len="size - 8"/>
+          </case>
+          <case range="2684354569">
+            <struct name="ms_propstore" comment="See https://msdn.microsoft.com/en-us/library/dd871346.aspx">
+              <data type="int" name="store_size" format="unsigned" len="4" display="hex" />
+              <data type="int" name="store_version" format="unsigned" len="4" display="hex" />
+              <use_struct name="format_id" type_name="GUID" />
+              <for name="serialized_property_value" count="" stop_test="this.value_size == 0">
+                <struct name="serialized_property_value">
+                  <data type="int" name="value_size" format="unsigned" len="4" display="hex" />
+                  <if test="value_size &gt; 4">
+                    <data type="int" name="id_or_name_size" format="unsigned" len="4" display="hex" />
+                  </if>
+                  <if test="value_size &gt; 4">
+                    <data type="int" name="reserved" format="unsigned" len="1" display="hex" domain="this == 0" />
+                  </if>
+                  <if test="value_size &gt; 4">
+                    <data type="none" name="value_or_and_and_value" len="value_size - 9"/>
+                  <else/>
+                    <if test="value_size &gt; 0">
+                      <data type="none" name="unknown" len="value_size - 4"/>
+                    </if>
+                  </if>
+                </struct>
+              </for>
+            </struct>
+          </case>
+          <case range="2684354571">
+            <struct name="known_folder_location">
+              <use_struct name="known_folder_id" type_name="GUID"/>
+              <data type="int" name="first_child_segment_offset" format="unsigned" len="4" display="hex"/>
+            </struct>
+          </case>
+          <case range="2684354572">
+            <data type="none" name="shell_item_blockdata" len="size - 8"/>
+          </case>
+          <case range="">
+            <data type="none" name="unknown_blockdata" len="size - 8"/>
+          </case>
+        </switch>
+      </if>
+    </struct>
+  </for>
+  <data type="none" name="none"/>
+</binary_file_format>
